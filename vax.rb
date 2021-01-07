@@ -1,6 +1,7 @@
 require 'net/http'
 require 'json'
 require 'date'
+require 'twitter'
 
 canada_population = 38008005
 
