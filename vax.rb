@@ -12,11 +12,14 @@ def get_data(date = Date.today)
   http = Net::HTTP.new(uri.host, uri.port)
   http.use_ssl = true
 
+  puts("requesting data")
   req = Net::HTTP::Get.new(uri.request_uri)
 
   response = http.request(req)
   data = JSON.parse(response.body)
   data = data["data"][0]
+
+  puts(data)
 
   new_vax = data["change_vaccinations"]
   total_vax = data["total_vaccinations"]
@@ -47,19 +50,31 @@ def generate_tweet()
 
   tweet_string = "Today #{new_vax} people were vaccinated in Canada. If Canada keeps vaccinating at the rate we did today, everyone will be vaccinated by #{date_fmt}."
 
+  puts("generated tweet string:")
+  puts("\t" + tweet_string)
+
   return tweet_string
 
   #puts("Overall, #{total_vax} people have been vaccinated. This is #{'%.2f' % percent_vax}% of the population.")
 end
 
 def get_twitter_client()
-    client = Twitter::REST::Client.new do |config|
-        config.consumer_key =           ENV['TWITTER_API_KEY']
-        config.consumer_secret =        ENV['TWITTER_API_SECRET']
-        config.access_token =           ENV['TWITTER_ACCESS_TOKEN']
-        config.access_token_secret =    ENV['TWITTER_ACCESS_TOKEN_SECRET']
+
+
+
+  client = Twitter::REST::Client.new do |config|
+
+    if not (ENV['TWITTER_API_KEY'] and ENV['TWITTER_API_SECRET'] and ENV['TWITTER_ACCESS_TOKEN'] and ENV['TWITTER_ACCESS_TOKEN_SECRET'])
+      raise("environment variables not set!")
     end
-    return client
+
+
+    config.consumer_key =           ENV['TWITTER_API_KEY']
+    config.consumer_secret =        ENV['TWITTER_API_SECRET']
+    config.access_token =           ENV['TWITTER_ACCESS_TOKEN']
+    config.access_token_secret =    ENV['TWITTER_ACCESS_TOKEN_SECRET']
+  end
+  return client
 end
 
 def send_tweet(twitter_client, tweet_string)
@@ -71,6 +86,7 @@ def get_heroku_client()
     return client
 end
 
+puts("generating tweet")
 tw_str = generate_tweet()
 puts(tw_str)
 
