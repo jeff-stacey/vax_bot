@@ -16,13 +16,16 @@ def get_data(date = Date.today)
   req = Net::HTTP::Get.new(uri.request_uri)
 
   response = http.request(req)
+
+  puts("data received (#{response.body.length} characters)")
+  
   data = JSON.parse(response.body)
   data = data["data"][0]
 
-  puts(data)
-
   new_vax = data["change_vaccinations"]
   total_vax = data["total_vaccinations"]
+
+  puts("data parsed: #{new_vax} new vaccinations, #{total_vax} total vaccinations")
 
   return new_vax, total_vax
 
@@ -88,7 +91,6 @@ end
 
 puts("generating tweet")
 tw_str = generate_tweet()
-puts(tw_str)
 
 puts("getting twitter client")
 
