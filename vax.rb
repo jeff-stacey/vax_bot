@@ -3,6 +3,9 @@ require 'json'
 require 'time'
 require 'twitter'
 
+class NoDataError < StandardError
+end
+
 def get_data(t = Time.now)
 
   t.utc
@@ -36,8 +39,12 @@ def get_data(t = Time.now)
   data = JSON.parse(response.body)
   data = data["data"][0]
 
-  new_vax = data["change_vaccinations"]
-  total_vax = data["total_vaccinations"]
+  begin
+    new_vax = data["change_vaccinations"]
+    total_vax = data["total_vaccinations"]
+  rescue NoMethodError
+    raise(NoDataError, "no data available for today")
+  end
 
   puts("data parsed: #{new_vax} new vaccinations, #{total_vax} total vaccinations")
 
@@ -71,13 +78,9 @@ def generate_tweet()
   puts("\t" + tweet_string)
 
   return tweet_string
-
-  #puts("Overall, #{total_vax} people have been vaccinated. This is #{'%.2f' % percent_vax}% of the population.")
 end
 
 def get_twitter_client()
-
-
 
   client = Twitter::REST::Client.new do |config|
 
@@ -104,7 +107,12 @@ def get_heroku_client()
 end
 
 puts("generating tweet")
-tw_str = generate_tweet()
+begin
+  tw_str = generate_tweet()
+rescue NoDataError => e
+  puts e.message
+  return
+end
 
 puts("getting twitter client")
 
