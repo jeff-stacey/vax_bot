@@ -45,7 +45,7 @@ def generate_tweet()
   day = date_of_total_vax.mday.to_s + day_endings[date_of_total_vax.mday]
   date_fmt = date_of_total_vax.strftime("%B #{day} %Y")
 
-  tweet_string = "Today #{new_vax} people were vaccinated in Canada. If Canada keeps vaccinating at the rate we did today, everyone will be vaccinated by #{date_fmt}"
+  tweet_string = "Today #{new_vax} people were vaccinated in Canada. If Canada keeps vaccinating at the rate we did today, everyone will be vaccinated by #{date_fmt}."
 
   return tweet_string
 
