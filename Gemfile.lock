@@ -4,7 +4,6 @@ GEM
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
     buftok (0.2.0)
-    date (3.1.1)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
     equalizer (0.0.11)
@@ -36,6 +35,7 @@ GEM
     rake (13.0.3)
     simple_oauth (0.3.1)
     thread_safe (0.3.6)
+    time (0.1.0)
     twitter (7.0.0)
       addressable (~> 2.3)
       buftok (~> 0.2.0)
@@ -56,9 +56,9 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  date
   json
   net-http
+  time
   twitter
 
 RUBY VERSION
