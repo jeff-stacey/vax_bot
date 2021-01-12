@@ -1,9 +1,20 @@
 require 'net/http'
 require 'json'
-require 'date'
+require 'time'
 require 'twitter'
 
-def get_data(date = Date.today)
+def get_data(t = Time.now)
+
+  t.utc
+
+  if t.zone == "UTC"
+    puts("time in UTC, converting")
+    t = t.localtime("-08:00")
+  else 
+    puts("time local, we're all good")
+  end
+
+  date = t.strftime("%Y-%m-%d")
 
   # using the reports api
   endpoint = "/reports?date=#{date}"
