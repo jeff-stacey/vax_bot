@@ -8,7 +8,10 @@ def get_data(date = Date.today)
   # using the reports api
   endpoint = "/reports?date=#{date}"
 
-  uri = URI.parse("https://api.covid19tracker.ca#{endpoint}")
+  request_uri = "https://api.covid19tracker.ca#{endpoint}"
+  puts("requesting data from: " + request_uri)
+
+  uri = URI.parse(request_uri)
   http = Net::HTTP.new(uri.host, uri.port)
   http.use_ssl = true
 
