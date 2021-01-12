@@ -8,8 +8,6 @@ end
 
 def get_data(t = Time.now)
 
-  t.utc
-
   if t.zone == "UTC"
     puts("time in UTC, converting")
     t = t.localtime("-08:00")
