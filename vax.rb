@@ -2,6 +2,7 @@ require 'net/http'
 require 'json'
 require 'time'
 require 'twitter'
+require 'date'
 
 class NoDataError < StandardError
 end
@@ -53,14 +54,14 @@ end
 def generate_tweet()
   canada_population = 38008005
 
-  new_vax, total_vax = get_data()
+  new_vax, total_vax = get_data(t = (Time.now - 24*60*60))
 
   percent_vax = total_vax.to_f / canada_population * 100
 
   remaining_vax = canada_population - total_vax
   days_to_total_vax = remaining_vax.to_f/new_vax
   days_to_total_vax = days_to_total_vax.ceil()
-  date_of_total_vax = Date.today + days_to_total_vax 
+  date_of_total_vax = (Date.today - 1) + days_to_total_vax 
 
   day_endings = ["th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th",
                  "th", "th", "th", "th", "th", "th", "th", "th", "th", "th",
@@ -70,7 +71,7 @@ def generate_tweet()
   day = date_of_total_vax.mday.to_s + day_endings[date_of_total_vax.mday]
   date_fmt = date_of_total_vax.strftime("%B #{day} %Y")
 
-  tweet_string = "Today #{new_vax} people were vaccinated in Canada. If Canada keeps vaccinating at the rate we did today, everyone will be vaccinated by #{date_fmt}."
+  tweet_string = "Yesterday #{new_vax} people were vaccinated in Canada. If Canada keeps vaccinating at the rate we did today, everyone will be vaccinated by #{date_fmt}."
 
   puts("generated tweet string:")
   puts("\t" + tweet_string)
